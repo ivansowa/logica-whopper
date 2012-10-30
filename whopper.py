@@ -41,7 +41,7 @@ lex.lex()
 precedence = (
     ('left', 'IMPLIES', 'EQUALS'),
     ('left', 'AND', 'OR'),
-    ('left', 'LPAREN', 'RPAREN', 'NOT'),
+    ('nonassoc', 'LPAREN', 'RPAREN', 'NOT'),
     )
 
 # dictionary of identifiers
