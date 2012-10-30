@@ -6,6 +6,8 @@ reserved = {
     'not': 'NOT',
     'implies': 'IMPLIES',
     'equals': 'EQUALS',
+    'true' : 'TRUE',
+    'false' : 'FALSE'
     }
 
 tokens = [
@@ -108,3 +110,40 @@ def p_error(t):
 
 import ply.yacc as yacc
 yacc.yacc()
+
+result = yacc.parse('A and C equals D')
+print result
+
+# creates a truth table
+
+And=lambda x,y:x and y
+Or=lambda x,y:x or y
+Not=lambda x:not x
+Impl=lambda x,y:Or(Not(x), y)
+
+def p_fixed_table(p):
+    if p is 1:
+        yield [True]
+        yield [False]
+    else:
+        for i in p_fixed_table(p - 1):
+            yield i + [True]
+            yield i + [False]
+
+def p_truth_table(identifiers, expr):
+    for cond in p_fixed_table(len(identifiers)):
+        values = dict(zip(identifiers, cond))
+        yield cond + [p_eval_expr(values, expr)]
+
+def p_eval_expr(values, expr):
+    argarr = []
+    for arg in expr[1:]:
+        if (type(arg) in [tuple, list]):
+            argarr.append(eval_expr(values, arg))
+        elif (arg in values):
+            argarr.append(values[arg])
+        else:
+            raise ValueError('Invalid expr')
+    return expr[0](*argarr)
+
+print([i for i in p_truth_table(['x','y'], (Impl, 'x', 'y'))])
