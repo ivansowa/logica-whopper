@@ -119,7 +119,7 @@ Or = lambda x,y:x or y
 Not = lambda x:not x
 Implies = lambda x,y:Or(Not(x), y)
 
-def p_fixed_table(p):
+def fixed_table(p):
     """
     Generate true/false permutations for the given number of variables.
     Ex: if p=2
@@ -133,20 +133,20 @@ def p_fixed_table(p):
         yield [True]
         yield [False]
     else:
-        for i in p_fixed_table(p - 1):
+        for i in fixed_table(p - 1):
             yield i + [True]
             yield i + [False]
 
-def p_truth_table(variables, expr):
+def truth_table(variables, expr):
     """
     Takes an array of variables and displays a truth table
     for each possible value combination of vars.
     """
-    for cond in p_fixed_table(len(variables)):
+    for cond in fixed_table(len(variables)):
         values = dict(zip(variables, cond))
-        yield cond + [p_eval_expr(values, expr)]
+        yield cond + [eval_expr(values, expr)]
 
-def p_eval_expr(values, expr):
+def eval_expr(values, expr):
     """
     Takes a dictionary values {var1 : val1, var2 : val2} and a tuple
     expr (lambda, var1, var2) returns evaluated value.
@@ -165,5 +165,6 @@ def p_eval_expr(values, expr):
             raise ValueError('Invalid expr')
     return expr[0](*argarr)
 
-for i in p_truth_table(['x','y'], (Implies, 'x', 'y')):
+for i in truth_table(['x','y'], (Implies, 'x', 'y')):
     print i
+
