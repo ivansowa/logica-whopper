@@ -5,9 +5,7 @@ reserved = {
     'or': 'OR',
     'not': 'NOT',
     'implies': 'IMPLIES',
-    'equals': 'EQUALS',
-    'true' : 'TRUE',
-    'false' : 'FALSE'
+    'equals': 'EQUALS'
     }
 
 tokens = [
@@ -116,12 +114,21 @@ print result
 
 # creates a truth table
 
-And=lambda x,y:x and y
-Or=lambda x,y:x or y
-Not=lambda x:not x
-Impl=lambda x,y:Or(Not(x), y)
+And = lambda x,y:x and y
+Or = lambda x,y:x or y
+Not = lambda x:not x
+Implies = lambda x,y:Or(Not(x), y)
 
 def p_fixed_table(p):
+    """
+    Generate true/false permutations for the given number of variables.
+    Ex: if p=2
+    Returns (not necessarily in this order):
+        True, True
+        True, False
+        False, False
+        False, True
+    """
     if p is 1:
         yield [True]
         yield [False]
@@ -130,12 +137,24 @@ def p_fixed_table(p):
             yield i + [True]
             yield i + [False]
 
-def p_truth_table(identifiers, expr):
-    for cond in p_fixed_table(len(identifiers)):
-        values = dict(zip(identifiers, cond))
+def p_truth_table(variables, expr):
+    """
+    Takes an array of variables and displays a truth table
+    for each possible value combination of vars.
+    """
+    for cond in p_fixed_table(len(variables)):
+        values = dict(zip(variables, cond))
         yield cond + [p_eval_expr(values, expr)]
 
 def p_eval_expr(values, expr):
+    """
+    Takes a dictionary values {var1 : val1, var2 : val2} and a tuple
+    expr (lambda, var1, var2) returns evaluated value.
+    expr needs to be in a LISP like format (operator, arg1, arg2).
+
+    Returns the value of expr when variables are set according to
+    values.
+    """
     argarr = []
     for arg in expr[1:]:
         if (type(arg) in [tuple, list]):
@@ -146,4 +165,5 @@ def p_eval_expr(values, expr):
             raise ValueError('Invalid expr')
     return expr[0](*argarr)
 
-print([i for i in p_truth_table(['x','y'], (Impl, 'x', 'y'))])
+for i in p_truth_table(['x','y'], (Implies, 'x', 'y')):
+    print i
