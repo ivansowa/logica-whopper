@@ -125,7 +125,6 @@ def truth_table(variables):
                 l[i] = False
         yield l
 
-
 def resolve(tree):
     if (tree is True or tree is False):
         return tree
@@ -140,8 +139,9 @@ def resolve(tree):
     elif (tree[0] is 'EQUALS'):
         return resolve(tree[1]) is resolve(tree[2])
 
-
 #change the tree variable values
 for i in truth_table(identifiers):
+    d = {}
     for j in range(0,len(identifiers)):
-        dict[identifiers[j]] = truth_table[j]
+        d[identifiers[j]] = i[j]
+    print d
