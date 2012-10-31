@@ -127,8 +127,8 @@ def truth_table(variables):
 
 
 def resolve(tree):
-    if (tree[0] is True or Tree[0] is False):
-        return tree[0]
+    if (tree is True or tree is False):
+        return tree
     elif (tree[0] is 'AND'):
         return resolve(tree[1]) and resolve(tree[2])
     elif (tree[0] is 'OR'):
@@ -137,6 +137,8 @@ def resolve(tree):
         return not resolve(tree[1])
     elif (tree[0] is 'IMPLIES'):
         return (not resolve(tree[1]) or resolve(tree[2]))
+    elif (tree[0] is 'EQUALS'):
+        return resolve(tree[1]) is resolve(tree[2])
 
 
 #change the tree variable values
