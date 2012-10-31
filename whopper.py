@@ -119,6 +119,21 @@ def binary_values(variables):
         binary_string = (bin(i)[2:]).zfill(len(variables))
         yield binary_string
 
+def truth_table(variables):
+    for binary_value in binary_values(variables):
+        for i in binary_value:
+            values = []
+            if (i is '1'):
+                values.append(True)
+            elif (i is '0'):
+               values.append(False)
+            yield values
+
+for i in truth_table(identifiers):
+    print i
+
+#print test_for(identifiers)
+
 def test_for(binary_string):
     values = []
     for i in binary_string:
@@ -128,6 +143,6 @@ def test_for(binary_string):
             values.append(False)
     return values
 
-for i in binary_values(identifiers):
-    print test_for(i)
+#for i in binary_values(identifiers):
+#    print test_for(i)
 
