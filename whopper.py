@@ -125,23 +125,26 @@ def truth_table(variables):
                 l[i] = False
         yield l
 
-def resolve(tree):
+def resolve(tree, d):
     if (tree is True or tree is False):
         return tree
     elif (tree[0] is 'AND'):
-        return resolve(tree[1]) and resolve(tree[2])
+        return resolve(tree[1], d) and resolve(tree[2], d)
     elif (tree[0] is 'OR'):
-        return resolve(tree[1]) or resolve(tree[2])
+        return resolve(tree[1], d) or resolve(tree[2], d)
     elif (tree[0] is 'NOT'):
-        return not resolve(tree[1])
+        return not resolve(tree[1], d)
     elif (tree[0] is 'IMPLIES'):
-        return (not resolve(tree[1]) or resolve(tree[2]))
+        return (not resolve(tree[1], d) or resolve(tree[2]), d)
     elif (tree[0] is 'EQUALS'):
-        return resolve(tree[1]) is resolve(tree[2])
+        return resolve(tree[1], d) is resolve(tree[2], d)
+    elif (tree[0] is 'IDENTIFIER'):
+        return d[tree[1]]
 
 #change the tree variable values
 for i in truth_table(identifiers):
     d = {}
     for j in range(0,len(identifiers)):
         d[identifiers[j]] = i[j]
-    print d
+    if (resolve(tree, d) is False):
+        print 'Expressao invalida.'
