@@ -151,6 +151,6 @@ def execute(tree):
 
 while 1:
     try:
-        execute(yacc.parse(raw_input('whopper >')))
+        execute(yacc.parse(raw_input('whopper > ')))
     except EOFError:
         break
