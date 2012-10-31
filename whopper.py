@@ -114,20 +114,15 @@ print result
 
 # creates a truth table
 
-def binary_values(variables):
-    for i in range(0, pow(2,len(variables))):
-        binary_string = (bin(i)[2:]).zfill(len(variables))
-        yield binary_string
-
 def truth_table(variables):
-    for binary_value in binary_values(variables):
-        values = []
-        for i in binary_value:
-            if (i is '1'):
-                values.append(True)
-            elif (i is '0'):
-               values.append(False)
-        yield values
+    for i in range(0, pow(2,len(variables))):
+        l = list((bin(i)[2:]).zfill(len(variables)))
+        for i in range(0, len(l)):
+            if l[i] is '1':
+                l[i] = True
+            else:
+                l[i] = False
+        yield l
 
 for i in truth_table(identifiers):
     print i
