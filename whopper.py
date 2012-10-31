@@ -109,9 +109,9 @@ def p_error(t):
 import ply.yacc as yacc
 yacc.yacc()
 
-result = yacc.parse('A and C equals D and E')
+tree = yacc.parse('A and C equals D and E')
 
-print(result)
+print(tree)
 
 # creates a truth table
 
@@ -125,16 +125,18 @@ def truth_table(variables):
                 l[i] = False
         yield l
 
-class Tree(object):
-    def __init__(self):
-        self.left = None
-        self.right = None
-        self.type = None
-        self.value = None
 
-for i in result:
-    if (i is '('):
-        root = Tree()
+def func(tree):
+    if (tree[0] is True or Tree[0] is False):
+        return tree[0]
+    elif (tree[0] is 'AND'):
+        return func(tree[1]) and func(tree[2])
+    elif (tree[0] is 'OR'):
+        return func(tree[1]) or func(tree[2])
+    elif (tree[0] is 'NOT'):
+        return not func(tree[1])
+    elif (tree[0] is 'IMPLIES'):
+        return (not tree[1] or tree[2])
 
 for i in truth_table(identifiers):
     print(i)
