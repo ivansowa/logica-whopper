@@ -114,9 +114,9 @@ print result
 
 # creates a truth table
 
-def binary_values():
-    for i in range(0, pow(2,len(identifiers))):
-        binary_string = (bin(i)[2:]).zfill(len(identifiers))
+def binary_values(variables):
+    for i in range(0, pow(2,len(variables))):
+        binary_string = (bin(i)[2:]).zfill(len(variables))
         yield binary_string
 
 def test_for(binary_string):
@@ -128,6 +128,6 @@ def test_for(binary_string):
             values.append(False)
     return values
 
-for i in binary_values():
+for i in binary_values(identifiers):
     print test_for(i)
 
