@@ -153,7 +153,7 @@ def execute(tree):
 
 while 1:
     try:
-        s = input('calc > ')   # Use raw_input on Python 2
+        s = raw_input('A and C implies D')  
     except EOFError:
         break
     execute(yacc.parse(s))
