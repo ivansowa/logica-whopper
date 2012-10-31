@@ -133,7 +133,7 @@ def resolve(tree, d):
     elif (tree[0] is 'NOT'):
         return not resolve(tree[1], d)
     elif (tree[0] is 'IMPLIES'):
-        return (not resolve(tree[1], d) or resolve(tree[2]), d)
+        return (not resolve(tree[1], d) or resolve(tree[2], d))
     elif (tree[0] is 'EQUALS'):
         return resolve(tree[1], d) is resolve(tree[2], d)
     elif (tree[0] is 'IDENTIFIER'):
@@ -144,6 +144,7 @@ for i in truth_table(identifiers):
     d = {}
     for j in range(0,len(identifiers)):
         d[identifiers[j]] = i[j]
-    if (resolve(tree, d) is False):
+    if resolve(tree, d) is False:
         print('Expressao invalida.')
         break
+    print('Expressao valida')
