@@ -118,6 +118,16 @@ def binary_values():
     for i in range(0, pow(2,len(identifiers))):
         yield i
 
+def test_for(binary_string):
+    values = []
+    for i in binary_string:
+        if (i is '0'):
+            values.append(True)
+        elif (i is '1'):
+            values.append(False)
+    return values
+
 for i in binary_values():
-    print (bin(i)[2:]).zfill(len(identifiers))
+    string = (bin(i)[2:]).zfill(len(identifiers))
+    print test_for(string)
 
