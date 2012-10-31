@@ -138,11 +138,8 @@ def resolve(tree):
     elif (tree[0] is 'IMPLIES'):
         return (not resolve(tree[1]) or resolve(tree[2]))
 
-for i in range(0,len(identifiers)):
-    dict[identifiers[i]] = truth_table[i]
 
-
-#for i in truth_table(identifiers):
-    #print(i)
-    # do something
-
+#change the tree variable values
+for i in truth_table(identifiers):
+    for i in range(0,len(identifiers)):
+        dict[identifiers[i]] = truth_table[i]
