@@ -109,14 +109,15 @@ def p_error(t):
 import ply.yacc as yacc
 yacc.yacc()
 
-result = yacc.parse('A and C equals D')
+result = yacc.parse('A and C equals D and E')
 print result
 
 # creates a truth table
 
 def binary_values():
     for i in range(0, pow(2,len(identifiers))):
-        yield i
+        binary_string = (bin(i)[2:]).zfill(len(identifiers))
+        yield binary_string
 
 def test_for(binary_string):
     values = []
@@ -128,6 +129,5 @@ def test_for(binary_string):
     return values
 
 for i in binary_values():
-    string = (bin(i)[2:]).zfill(len(identifiers))
-    print test_for(string)
+    print test_for(i)
 
