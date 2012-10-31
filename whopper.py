@@ -109,7 +109,7 @@ def p_error(t):
 import ply.yacc as yacc
 yacc.yacc()
 
-tree = yacc.parse('A and C equals D and E')
+tree = yacc.parse('A and C implies D')
 
 print(tree)
 
@@ -126,9 +126,7 @@ def truth_table(variables):
         yield l
 
 def resolve(tree, d):
-    if (tree is True or tree is False):
-        return tree
-    elif (tree[0] is 'AND'):
+    if (tree[0] is 'AND'):
         return resolve(tree[1], d) and resolve(tree[2], d)
     elif (tree[0] is 'OR'):
         return resolve(tree[1], d) or resolve(tree[2], d)
@@ -147,4 +145,5 @@ for i in truth_table(identifiers):
     for j in range(0,len(identifiers)):
         d[identifiers[j]] = i[j]
     if (resolve(tree, d) is False):
-        print 'Expressao invalida.'
+        print('Expressao invalida.')
+        break
