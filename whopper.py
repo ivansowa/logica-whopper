@@ -141,7 +141,6 @@ def execute(tree):
         for j in range(0,len(identifiers)):
             d[identifiers[j]] = i[j]
         if resolve(tree, d) is False:
-            failed = True
             print('Invalid expression')
             break
     else:
