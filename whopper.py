@@ -144,10 +144,10 @@ def execute(tree):
             d[identifiers[j]] = i[j]
         if resolve(tree, d) is False:
             failed = True
-            print('Expressao invalida')
+            print('Invalid expression')
             break
     else:
-        print('Exressao valida.')
+        print('Valid expression.')
 
 #change the tree variable values
 
