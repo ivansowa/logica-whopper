@@ -109,8 +109,6 @@ def p_error(t):
 import ply.yacc as yacc
 yacc.yacc()
 
-tree = yacc.parse('A and B implies A')
-
 # creates a truth table
 
 def truth_table(variables):
