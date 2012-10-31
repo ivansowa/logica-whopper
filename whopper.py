@@ -109,7 +109,7 @@ def p_error(t):
 import ply.yacc as yacc
 yacc.yacc()
 
-tree = yacc.parse('(A and B) and A implies D')
+tree = yacc.parse('A and B implies A')
 
 # creates a truth table
 
@@ -137,14 +137,24 @@ def resolve(tree, d):
     elif (tree[0] is 'IDENTIFIER'):
         return d[tree[1]]
 
+def execute(tree):
+    for i in truth_table(identifiers):
+        d = {}
+        for j in range(0,len(identifiers)):
+            d[identifiers[j]] = i[j]
+        if resolve(tree, d) is False:
+            failed = True
+            print('Expressao invalida')
+            break
+    else:
+        print('Exressao valida.')
+
 #change the tree variable values
-for i in truth_table(identifiers):
-    d = {}
-    for j in range(0,len(identifiers)):
-        d[identifiers[j]] = i[j]
-    if resolve(tree, d) is False:
-        failed = True
-        print('Expressao invalida')
+
+while 1:
+    try:
+        s = input('calc > ')   # Use raw_input on Python 2
+    except EOFError:
         break
-else:
-    print('Exressao valida.')
+    execute(yacc.parse(s))
+
