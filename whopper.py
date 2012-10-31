@@ -138,15 +138,13 @@ def resolve(tree, d):
         return d[tree[1]]
 
 #change the tree variable values
-failed = False
 for i in truth_table(identifiers):
     d = {}
     for j in range(0,len(identifiers)):
         d[identifiers[j]] = i[j]
     if resolve(tree, d) is False:
         failed = True
+        print('Expressao invalida')
         break
-if failed:
-    print('Expressao invalida')
 else:
     print('Exressao valida.')
