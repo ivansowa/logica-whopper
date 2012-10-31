@@ -126,19 +126,23 @@ def truth_table(variables):
         yield l
 
 
-def func(tree):
+def resolve(tree):
     if (tree[0] is True or Tree[0] is False):
         return tree[0]
     elif (tree[0] is 'AND'):
-        return func(tree[1]) and func(tree[2])
+        return resolve(tree[1]) and resolve(tree[2])
     elif (tree[0] is 'OR'):
-        return func(tree[1]) or func(tree[2])
+        return resolve(tree[1]) or resolve(tree[2])
     elif (tree[0] is 'NOT'):
-        return not func(tree[1])
+        return not resolve(tree[1])
     elif (tree[0] is 'IMPLIES'):
-        return (not tree[1] or tree[2])
+        return (not resolve(tree[1]) or resolve(tree[2]))
 
-for i in truth_table(identifiers):
-    print(i)
+for i in range(0,len(identifiers)):
+    dict[identifiers[i]] = truth_table[i]
+
+
+#for i in truth_table(identifiers):
+    #print(i)
     # do something
 
