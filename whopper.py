@@ -110,7 +110,8 @@ import ply.yacc as yacc
 yacc.yacc()
 
 result = yacc.parse('A and C equals D and E')
-print result
+
+print(result)
 
 # creates a truth table
 
@@ -124,6 +125,18 @@ def truth_table(variables):
                 l[i] = False
         yield l
 
+class Tree(object):
+    def __init__(self):
+        self.left = None
+        self.right = None
+        self.type = None
+        self.value = None
+
+for i in result:
+    if (i is '('):
+        root = Tree()
+
 for i in truth_table(identifiers):
-    print i
+    print(i)
+    # do something
 
