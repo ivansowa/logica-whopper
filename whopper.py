@@ -121,9 +121,9 @@ def binary_values():
 def test_for(binary_string):
     values = []
     for i in binary_string:
-        if (i is '0'):
+        if (i is '1'):
             values.append(True)
-        elif (i is '1'):
+        elif (i is '0'):
             values.append(False)
     return values
 
