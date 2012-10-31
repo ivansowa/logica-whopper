@@ -151,7 +151,7 @@ def execute(tree):
 
 while 1:
     try:
-        s = raw_input('A and C implies D')  
+        s = raw_input('whopper >')  
     except EOFError:
         break
     execute(yacc.parse(s))
