@@ -141,5 +141,5 @@ def resolve(tree):
 
 #change the tree variable values
 for i in truth_table(identifiers):
-    for i in range(0,len(identifiers)):
-        dict[identifiers[i]] = truth_table[i]
+    for j in range(0,len(identifiers)):
+        dict[identifiers[j]] = truth_table[j]
