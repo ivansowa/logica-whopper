@@ -171,23 +171,25 @@ def execute(tree, identifiers, expression):
         table.append(line)
     table[0].append(expression)
     import sys
-    print len(table[0])
-    col_paddings = []
     out = sys.stdout
+    col_paddings = []
+
     for i in range(len(table[0])):
         col_paddings.append(get_max_width(table, i))
     for row in table:
         # left col
-        print >> out, row[0].ljust(col_paddings[0] + 1),
+        #print >> out, row[0].ljust(col_paddings[0] + 1),
         # rest of the cols
-        for i in range(1, len(row)):
+        for i in range(0, len(row)):
             col = format_num(row[i]).rjust(col_paddings[i] + 2)
             print >> out, col,
         print >> out
+    print >> out
     if(failed):
-        print('Invalid expression.')
+        print >> out, 'Invalid expression.',
     else:
-        print('Valid expression.')
+        print >> out, 'Valid expression.',
+    print >> out
 
 while 1:
     identifiers = []
