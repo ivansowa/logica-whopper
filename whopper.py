@@ -135,21 +135,70 @@ def resolve(tree, d):
     elif (tree[0] is 'IDENTIFIER'):
         return d[tree[1]]
 
-def execute(tree):
+# format the table
+
+import locale
+locale.setlocale(locale.LC_NUMERIC, "")
+
+def format_num(num):
+    """Format a number according to given places.
+    Adds commas, etc. Will truncate floats into ints!"""
+    try:
+        inum = int(num)
+        return locale.format("%.*f", (0, inum), True)
+    except (ValueError, TypeError):
+        return str(num)
+
+def get_max_width(table, index):
+    return max([len(format_num(row[index])) for row in table])
+
+def pprint_table(table):
+    """
+    Prints out a table of data, padded for alignment
+    @param table: The table to print. A list of lists.
+    Each row must have the same number of columns.
+    """
+    col_paddings = []
+    for i in range(len(table[0])):
+        col_paddings.append(get_max_width(table, i))
+    for row in table:
+        # left col
+        print (row[0].ljust(col_paddings[0] + 1)
+        # rest of the cols
+        for i in range(1, len(row)):
+            col = format_num(row[i]).rjust(col_paddings[i] + 2)
+            print col
+        print ""
+
+
+
+# Executes the program
+
+def execute(tree, identifiers, expression):
+    failed = False
+    table = []
+    identifiers.append(expression)
+    table.append(identifiers)
     for i in truth_table(identifiers):
         d = {}
         for j in range(0,len(identifiers)):
             d[identifiers[j]] = i[j]
         if resolve(tree, d) is False:
-            print('Invalid expression')
-            break
+            failed = True
+            i.append(False)
+        else:
+            i.append(True)
+        table.append(i)
+    pprint_table(table)
+    if(failed):
+        print('Invalid expression.')
     else:
         print('Valid expression.')
 
-#change the tree variable values
-
 while 1:
+    identifiers = []
+    expression = raw_input('whopper > ')
     try:
-        execute(yacc.parse(raw_input('whopper > ')))
+        execute(yacc.parse(expression), identifiers, expression)
     except EOFError:
         break
