@@ -135,8 +135,6 @@ def resolve(tree, d):
     elif (tree[0] is 'IDENTIFIER'):
         return d[tree[1]]
 
-# format the table
-
 import locale
 locale.setlocale(locale.LC_NUMERIC, "")
 
@@ -150,7 +148,7 @@ def format_num(num):
         return str(num)
 
 def get_max_width(table, index):
-    return max([len(row[index]) for row in table])
+    return max([len(format_num(row[index])) for row in table])
 
 
 # Executes the program
@@ -186,7 +184,6 @@ def execute(tree, identifiers, expression):
             col = format_num(row[i]).rjust(col_paddings[i] + 2)
             print >> out, col,
         print >> out
-    #pprint_table(table, sys.stdout)
     if(failed):
         print('Invalid expression.')
     else:
