@@ -150,26 +150,7 @@ def format_num(num):
         return str(num)
 
 def get_max_width(table, index):
-    return max([len(format_num(row[index])) for row in table])
-
-def pprint_table(table):
-    """
-    Prints out a table of data, padded for alignment
-    @param table: The table to print. A list of lists.
-    Each row must have the same number of columns.
-    """
-    col_paddings = []
-    for i in range(len(table[0])):
-        col_paddings.append(get_max_width(table, i))
-    for row in table:
-        # left col
-        print (row[0].ljust(col_paddings[0] + 1)
-        # rest of the cols
-        for i in range(1, len(row)):
-            col = format_num(row[i]).rjust(col_paddings[i] + 2)
-            print col
-        print ""
-
+    return max([len(row[index]) for row in table])
 
 
 # Executes the program
@@ -177,19 +158,35 @@ def pprint_table(table):
 def execute(tree, identifiers, expression):
     failed = False
     table = []
-    identifiers.append(expression)
     table.append(identifiers)
-    for i in truth_table(identifiers):
+    for line in truth_table(identifiers):
         d = {}
         for j in range(0,len(identifiers)):
-            d[identifiers[j]] = i[j]
+            d[identifiers[j]] = line[j]
         if resolve(tree, d) is False:
             failed = True
-            i.append(False)
+            line.append(False)
         else:
-            i.append(True)
-        table.append(i)
-    pprint_table(table)
+            line.append(True)
+        for k in range(0,len(line)):
+            line[k] = str(line[k])
+        table.append(line)
+    table[0].append(expression)
+    import sys
+    print len(table[0])
+    col_paddings = []
+    out = sys.stdout
+    for i in range(len(table[0])):
+        col_paddings.append(get_max_width(table, i))
+    for row in table:
+        # left col
+        print >> out, row[0].ljust(col_paddings[0] + 1),
+        # rest of the cols
+        for i in range(1, len(row)):
+            col = format_num(row[i]).rjust(col_paddings[i] + 2)
+            print >> out, col,
+        print >> out
+    #pprint_table(table, sys.stdout)
     if(failed):
         print('Invalid expression.')
     else:
