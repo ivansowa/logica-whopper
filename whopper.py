@@ -140,8 +140,9 @@ class table_decorator:
             self.table = args[-1]
             args = args[:-1]
 
-        result = self.function(*args)
-        self.table[args[0]] = result
+        result = (args[0], self.function(*args))
+        if not (result in self.table):
+            self.table.append(result)
         return result
 
 @table_decorator
@@ -214,12 +215,12 @@ def execute(expression):
     table.append(identifiers)
 
     for line in truth_table(identifiers):
-        table2 = {}
+        table2 = []
         print '------'
         line.append(resolve(tree, createResolveDict(line), table2))
         for i in table2:
-            print '> ' + printableTree(i)
-            print '>> ' + str(table2[i])
+            print '> ' + printableTree(i[0])
+            print '>> ' + str(table2[1])
         print '------'
         if line[-1] is False:
             failed = True
