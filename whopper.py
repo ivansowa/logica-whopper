@@ -205,4 +205,8 @@ while 1:
     try:
         execute(raw_input('whopper > '))
     except EOFError:
+        print
         break
+    except KeyboardInterrupt:
+        print
+        continue
