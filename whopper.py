@@ -210,3 +210,6 @@ while 1:
     except KeyboardInterrupt:
         print
         continue
+    except TypeError:
+        print
+        continue
