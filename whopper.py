@@ -131,6 +131,20 @@ def truth_table(variables):
                 l[i] = False
         yield l
 
+class table_decorator:
+    def __init__(self, function):
+        self.function = function
+
+    def __call__(self, *args):
+        if len(args) == 3:
+            self.table = args[-1]
+            args = args[:-1]
+
+        result = self.function(*args)
+        self.table[args[0]] = result
+        return result
+
+@table_decorator
 def resolve(tree, d):
     if (tree[0] is 'AND'):
         return resolve(tree[1], d) and resolve(tree[2], d)
@@ -145,11 +159,25 @@ def resolve(tree, d):
     elif (tree[0] is 'IDENTIFIER'):
         return d[tree[1]]
 
-def resolveWithList(tree, l):
+def createResolveDict(l):
     d = {}
     for i in range(0,len(identifiers)):
         d[identifiers[i]] = l[i]
-    return resolve(tree, d)
+    return d
+
+def printableTree(tree):
+    if (tree[0] is 'AND'):
+        return printableTree(tree[1]) + ' and ' + printableTree(tree[2])
+    elif (tree[0] is 'OR'):
+        return printableTree(tree[1]) + ' or ' + printableTree(tree[2])
+    elif (tree[0] is 'NOT'):
+        return 'not ' + printableTree(tree[1])
+    elif (tree[0] is 'IMPLIES'):
+        return printableTree(tree[1]) + ' implies ' + printableTree(tree[2])
+    elif (tree[0] is 'EQUALS'):
+        return printableTree(tree[1]) + ' equals ' + printableTree(tree[2])
+    elif (tree[0] is 'IDENTIFIER'):
+        return tree[1]
 
 import locale
 locale.setlocale(locale.LC_NUMERIC, "")
@@ -186,7 +214,13 @@ def execute(expression):
     table.append(identifiers)
 
     for line in truth_table(identifiers):
-        line.append(resolveWithList(tree, line))
+        table2 = {}
+        print '------'
+        line.append(resolve(tree, createResolveDict(line), table2))
+        for i in table2:
+            print '> ' + printableTree(i)
+            print '>> ' + str(table2[i])
+        print '------'
         if line[-1] is False:
             failed = True
         for k in range(0,len(line)):
