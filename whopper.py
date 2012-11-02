@@ -116,10 +116,13 @@ def parse(expression):
     identifiers = []
     return yacc.parse(expression)
 
-# creates a truth table
 
+# creates a truth table ---------------------------------------------
 import sys
 out = sys.stdout
+
+import locale
+locale.setlocale(locale.LC_NUMERIC, "")
 
 def truth_table(variables):
     for i in range(0, pow(2,len(variables))):
@@ -147,6 +150,9 @@ class table_decorator:
 
 @table_decorator
 def resolve(tree, d):
+    '''
+    Returns the result of the expression (True of False)
+    '''
     if (tree[0] is 'AND'):
         return resolve(tree[1], d) and resolve(tree[2], d)
     elif (tree[0] is 'OR'):
@@ -180,12 +186,12 @@ def printableTree(tree):
     elif (tree[0] is 'IDENTIFIER'):
         return tree[1]
 
-import locale
-locale.setlocale(locale.LC_NUMERIC, "")
 
 def format_num(num):
-    """Format a number according to given places.
-    Adds commas, etc. Will truncate floats into ints!"""
+    """
+    Format a number according to given places.
+    Adds commas, etc. Will truncate floats into ints.
+    """
     try:
         inum = int(num)
         return locale.format("%.*f", (0, inum), True)
@@ -193,9 +199,16 @@ def format_num(num):
         return str(num)
 
 def get_max_width(table, index):
+    '''
+    Returns the max length of the table values,
+    that will be used to format the table.
+    '''
     return max([len(format_num(row[index])) for row in table])
 
 def print_table(table):
+    '''
+    Prints the final truth table.
+    '''
     col_paddings = []
     for i in range(len(table[0])):
         col_paddings.append(get_max_width(table, i))
@@ -206,13 +219,15 @@ def print_table(table):
         print >> out
     print >> out
 
-# Executes the program
 
 def execute(expression):
+    '''
+    Executes the program --------------------------------------------
+    '''
     tree = parse(expression)
     failed = False
     table = []
-    table.append(identifiers)
+    table.append(identifiers) # add the identifiers to the first line
 
     for line in truth_table(identifiers):
         table2 = []
@@ -224,9 +239,9 @@ def execute(expression):
         print '------'
         if line[-1] is False:
             failed = True
+        # convert to string
         for k in range(0,len(line)):
             line[k] = str(line[k])
-
         table.append(line)
 
     table[0].append(expression)
@@ -237,6 +252,8 @@ def execute(expression):
         print >> out, 'Valid expression.',
     print >> out
 
+
+# Main loop ---------------------------------------------------------
 while 1:
     try:
         execute(raw_input('whopper > '))
