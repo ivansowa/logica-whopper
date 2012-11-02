@@ -119,6 +119,7 @@ def parse(expression):
 # creates a truth table
 
 import sys
+out = sys.stdout
 
 def truth_table(variables):
     for i in range(0, pow(2,len(variables))):
@@ -165,6 +166,17 @@ def format_num(num):
 def get_max_width(table, index):
     return max([len(format_num(row[index])) for row in table])
 
+def print_table(table):
+    col_paddings = []
+    for i in range(len(table[0])):
+        col_paddings.append(get_max_width(table, i))
+    for row in table:
+        for i in range(0, len(row)):
+            col = format_num(row[i]).rjust(col_paddings[i] + 2)
+            print >> out, col,
+        print >> out
+    print >> out
+
 # Executes the program
 
 def execute(expression):
@@ -183,20 +195,7 @@ def execute(expression):
         table.append(line)
 
     table[0].append(expression)
-    out = sys.stdout
-    col_paddings = []
-
-    for i in range(len(table[0])):
-        col_paddings.append(get_max_width(table, i))
-    for row in table:
-        # left col
-        #print >> out, row[0].ljust(col_paddings[0] + 1),
-        # rest of the cols
-        for i in range(0, len(row)):
-            col = format_num(row[i]).rjust(col_paddings[i] + 2)
-            print >> out, col,
-        print >> out
-    print >> out
+    print_table(table)
     if(failed):
         print >> out, 'Invalid expression.',
     else:
