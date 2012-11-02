@@ -109,7 +109,14 @@ def p_error(t):
 import ply.yacc as yacc
 yacc.yacc()
 
+def parse(expression):
+    global identifiers
+    identifiers = []
+    return yacc.parse(expression)
+
 # creates a truth table
+
+import sys
 
 def truth_table(variables):
     for i in range(0, pow(2,len(variables))):
@@ -135,6 +142,12 @@ def resolve(tree, d):
     elif (tree[0] is 'IDENTIFIER'):
         return d[tree[1]]
 
+def resolveWithList(tree, l):
+    d = {}
+    for i in range(0,len(identifiers)):
+        d[identifiers[i]] = l[i]
+    return resolve(tree, d)
+
 import locale
 locale.setlocale(locale.LC_NUMERIC, "")
 
@@ -150,27 +163,24 @@ def format_num(num):
 def get_max_width(table, index):
     return max([len(format_num(row[index])) for row in table])
 
-
 # Executes the program
 
-def execute(tree, identifiers, expression):
+def execute(expression):
+    tree = parse(expression)
     failed = False
     table = []
     table.append(identifiers)
+
     for line in truth_table(identifiers):
-        d = {}
-        for j in range(0,len(identifiers)):
-            d[identifiers[j]] = line[j]
-        if resolve(tree, d) is False:
+        line.append(resolveWithList(tree, line))
+        if line[-1] is False:
             failed = True
-            line.append(False)
-        else:
-            line.append(True)
         for k in range(0,len(line)):
             line[k] = str(line[k])
+
         table.append(line)
+
     table[0].append(expression)
-    import sys
     out = sys.stdout
     col_paddings = []
 
@@ -192,9 +202,7 @@ def execute(tree, identifiers, expression):
     print >> out
 
 while 1:
-    identifiers = []
-    expression = raw_input('whopper > ')
     try:
-        execute(yacc.parse(expression), identifiers, expression)
+        execute(raw_input('whopper > '))
     except EOFError:
         break
