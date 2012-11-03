@@ -155,13 +155,19 @@ def resolve(tree, d):
     Returns the result of the expression (True of False)
     '''
     if (tree[0] is 'AND'):
-        return resolve(tree[1], d) and resolve(tree[2], d)
+        first = resolve(tree[1], d)
+        second = resolve(tree[2], d)
+        return first and second
     elif (tree[0] is 'OR'):
-        return resolve(tree[1], d) or resolve(tree[2], d)
+        first = resolve(tree[1], d)
+        second = resolve(tree[2], d)
+        return first or second
     elif (tree[0] is 'NOT'):
         return not resolve(tree[1], d)
     elif (tree[0] is 'IMPLIES'):
-        return (not resolve(tree[1], d) or resolve(tree[2], d))
+        first = not resolve(tree[1], d)
+        second = resolve(tree[2], d)
+        return first or second
     elif (tree[0] is 'EQUALS'):
         return resolve(tree[1], d) is resolve(tree[2], d)
     elif (tree[0] is 'IDENTIFIER'):
