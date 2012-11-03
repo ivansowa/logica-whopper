@@ -236,15 +236,16 @@ def execute(expression):
         print line
         line.append(resolve(tree, createResolveDict(line), table2))
         print str(len(table2)) + ' elements in table2.'
+        newLine = []
         for element in table2:
-            newLine = []
             if (loop is 1):
+                # adds the header
                 print 'Adding ' + printableTree(element[0]) + ' to newLine.'
                 newLine.append(printableTree(element[0]))
             else:
                 print 'Adding ' + str(element[-1]) + ' to newLine.'
                 newLine.append(str(element[-1]))
-            table.append(newLine)
+        table.append(newLine)
         print '------'
         if line[-1] is False:
             failed = True
