@@ -74,7 +74,7 @@ def p_paren_expr(p):
     '''
     paren_expr : LPAREN expr RPAREN
     '''
-    p[0] = p[2]
+    p[0] = ('PAREN', p[2])
 
 def p_not_expr(p):
     '''
@@ -165,23 +165,25 @@ def resolve(tree, d):
     '''
     Returns the result of the expression (True of False)
     '''
-    if (tree[0] is 'AND'):
+    if tree[0] is 'AND':
         first = resolve(tree[1], d)
         second = resolve(tree[2], d)
         return first and second
-    elif (tree[0] is 'OR'):
+    elif tree[0] is 'OR':
         first = resolve(tree[1], d)
         second = resolve(tree[2], d)
         return first or second
-    elif (tree[0] is 'NOT'):
+    elif tree[0] is 'NOT':
         return not resolve(tree[1], d)
-    elif (tree[0] is 'IMPLIES'):
+    elif tree[0] is 'IMPLIES':
         first = not resolve(tree[1], d)
         second = resolve(tree[2], d)
         return first or second
-    elif (tree[0] is 'EQUALS'):
+    elif tree[0] is 'EQUALS':
         return resolve(tree[1], d) is resolve(tree[2], d)
-    elif (tree[0] is 'IDENTIFIER'):
+    elif tree[0] is 'PAREN':
+        return resolve(tree[1], d)
+    elif tree[0] is 'IDENTIFIER':
         return d[tree[1]]
 
 def createResolveDict(l):
@@ -191,17 +193,19 @@ def createResolveDict(l):
     return d
 
 def printableTree(tree):
-    if (tree[0] is 'AND'):
+    if tree[0] is 'AND':
         return printableTree(tree[1]) + ' and ' + printableTree(tree[2])
-    elif (tree[0] is 'OR'):
+    elif tree[0] is 'OR':
         return printableTree(tree[1]) + ' or ' + printableTree(tree[2])
-    elif (tree[0] is 'NOT'):
+    elif tree[0] is 'NOT':
         return 'not ' + printableTree(tree[1])
-    elif (tree[0] is 'IMPLIES'):
+    elif tree[0] is 'IMPLIES':
         return printableTree(tree[1]) + ' implies ' + printableTree(tree[2])
-    elif (tree[0] is 'EQUALS'):
+    elif tree[0] is 'EQUALS':
         return printableTree(tree[1]) + ' equals ' + printableTree(tree[2])
-    elif (tree[0] is 'IDENTIFIER'):
+    elif tree[0] is 'PAREN':
+        return '(' + printableTree(tree[1]) + ')'
+    elif tree[0] is 'IDENTIFIER':
         return tree[1]
 
 
