@@ -228,26 +228,27 @@ def execute(expression):
     tree = parse(expression)
     failed = False
     table = []
-    table.append(identifiers) # add the identifiers to the first line
+    loop = 1
 
     for line in truth_table(identifiers):
         table2 = []
         print '------'
         print line
-        #print 'identifiers: ' + str(identifiers) + '\n' + 'line:' + str(line)
         line.append(resolve(tree, createResolveDict(line), table2))
+        print str(len(table2)) + ' elements in table2.'
         for element in table2:
-            print 'printableTree(element[0]) > ' + printableTree(element[0])
-            print 'table2[0] >> ' + str(table2[0])
+            newLine = []
+            if (loop is 1):
+                print 'Adding ' + printableTree(element[0]) + ' to newLine.'
+                newLine.append(printableTree(element[0]))
+            else:
+                print 'Adding ' + str(element[-1]) + ' to newLine.'
+                newLine.append(str(element[-1]))
+            table.append(newLine)
         print '------'
         if line[-1] is False:
             failed = True
-        # convert everything to string
-        for k in range(0,len(line)):
-            line[k] = str(line[k])
-        table.append(line)
-
-    table[0].append(expression)
+        loop = loop + 1
     print_table(table)
     if(failed):
         print >> out, 'Invalid expression.',
