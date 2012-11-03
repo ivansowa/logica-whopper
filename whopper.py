@@ -209,8 +209,9 @@ def print_table(table):
     '''
     Prints the final truth table.
     '''
+    print "Cheguei!!!"
     col_paddings = []
-    print '>>>>>> length = ' + len(table[0])
+    print '>>>>>> length = ' + str(len(table[0]))
     for i in range(len(table[0])):
         col_paddings.append(get_max_width(table, i))
     for row in table:
@@ -235,7 +236,6 @@ def execute(expression):
         print '------'
         print line
         line.append(resolve(tree, createResolveDict(line), table2))
-        print str(len(table2)) + ' elements in table2.'
         newLine = []
         for element in table2:
             if (loop is 1):
