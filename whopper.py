@@ -54,7 +54,7 @@ class SyntaxException(Exception):
         return 'Syntax error at ' + self.token.value
     def printPretty(self, expression):
         print(expression)
-        print('~' * self.token.lexpos + '^')
+        print('~' * self.token.lexpos + '^' * len(self.token.value))
 
 identifiers = []
 
