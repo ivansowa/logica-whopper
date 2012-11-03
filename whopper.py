@@ -146,7 +146,7 @@ class table_decorator:
         result = (args[0], self.function(*args))
         if not (result in self.table):
             self.table.append(result)
-        return result
+        return result[1]
 
 @table_decorator
 def resolve(tree, d):
@@ -243,8 +243,8 @@ def execute(expression):
                 print 'Adding ' + printableTree(element[0]) + ' to newLine.'
                 newLine.append(printableTree(element[0]))
             else:
-                print 'Adding ' + str(element[-1]) + ' to newLine.'
-                newLine.append(str(element[-1]))
+                print 'Adding ' + str(element[1]) + ' to newLine.'
+                newLine.append(str(element[1]))
         table.append(newLine)
         print '------'
         if line[-1] is False:
