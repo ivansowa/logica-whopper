@@ -107,6 +107,7 @@ def p_identifier_expr(p):
 
 def p_error(t):
     print("Syntax error at '%s'" % t.value)
+    raise RuntimeError
 
 import ply.yacc as yacc
 yacc.yacc()
@@ -269,6 +270,6 @@ while 1:
     except KeyboardInterrupt:
         print
         continue
-    except TypeError:
+    except RuntimeError:
         print
         continue
