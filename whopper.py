@@ -47,6 +47,15 @@ precedence = (
     )
 
 # dictionary of identifiers
+class SyntaxException(Exception):
+    def __init__(self, token):
+        self.token = token
+    def __str__(self):
+        return 'Syntax error at ' + self.token.value
+    def printPretty(self, expression):
+        print(expression)
+        print('~' * self.token.lexpos + '^')
+
 identifiers = []
 
 def p_expr(p):
@@ -106,8 +115,7 @@ def p_identifier_expr(p):
     p[0] = ('IDENTIFIER', p[1])
 
 def p_error(t):
-    print("Syntax error at '%s'" % t.value)
-    raise RuntimeError
+    raise SyntaxException(t)
 
 import ply.yacc as yacc
 yacc.yacc()
@@ -271,14 +279,18 @@ def execute(expression):
 
 # Main loop ---------------------------------------------------------
 while 1:
+    expr = ''
     try:
-        execute(raw_input('whopper > '))
+        expr = raw_input('whopper > ')
+        execute(expr)
     except EOFError:
         print
         break
     except KeyboardInterrupt:
         print
         continue
-    except RuntimeError:
-        print
+    except SyntaxException, e:
+        print('Syntax error:')
+        e.printPretty(expr)
+        print('')
         continue
