@@ -210,6 +210,7 @@ def print_table(table):
     Prints the final truth table.
     '''
     col_paddings = []
+    print '>>>>>> length = ' + len(table[0])
     for i in range(len(table[0])):
         col_paddings.append(get_max_width(table, i))
     for row in table:
@@ -232,14 +233,16 @@ def execute(expression):
     for line in truth_table(identifiers):
         table2 = []
         print '------'
+        print line
+        #print 'identifiers: ' + str(identifiers) + '\n' + 'line:' + str(line)
         line.append(resolve(tree, createResolveDict(line), table2))
-        for i in table2:
-            print '> ' + printableTree(i[0])
-            print '>> ' + str(table2[1])
+        for element in table2:
+            print 'printableTree(element[0]) > ' + printableTree(element[0])
+            print 'table2[0] >> ' + str(table2[0])
         print '------'
         if line[-1] is False:
             failed = True
-        # convert to string
+        # convert everything to string
         for k in range(0,len(line)):
             line[k] = str(line[k])
         table.append(line)
