@@ -157,7 +157,8 @@ class table_decorator:
                 return i[1]
 
         result = self.function(*args)
-        self.table.append((args[0], result))
+        if not (args[0][0] is 'PAREN'):
+            self.table.append((args[0], result))
         return result
 
 @table_decorator
