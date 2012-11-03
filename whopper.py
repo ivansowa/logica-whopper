@@ -237,6 +237,7 @@ def execute(expression):
         print line
         line.append(resolve(tree, createResolveDict(line), table2))
         newLine = []
+        print str(len(table2)) + ' elements in table2'
         for element in table2:
             if (loop is 1):
                 # adds the header
