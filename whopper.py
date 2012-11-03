@@ -152,10 +152,13 @@ class table_decorator:
             self.table = args[-1]
             args = args[:-1]
 
-        result = (args[0], self.function(*args))
-        if not (result in self.table):
-            self.table.append(result)
-        return result[1]
+        for i in self.table:
+            if i[0] == args[0]:
+                return i[1]
+
+        result = self.function(*args)
+        self.table.append((args[0], result))
+        return result
 
 @table_decorator
 def resolve(tree, d):
