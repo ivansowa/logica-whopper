@@ -210,6 +210,7 @@ def get_max_width(table, index):
     Returns the max length of the table values,
     that will be used to format the table.
     '''
+    print 'Muahahahah'
     return max([len(format_num(row[index])) for row in table])
 
 def print_table(table):
@@ -243,16 +244,18 @@ def execute(expression):
         print '------'
         print line
         line.append(resolve(tree, createResolveDict(line), table2))
+        header = []
         newLine = []
         print str(len(table2)) + ' elements in table2'
         for element in table2:
             if (loop is 1):
                 # adds the header
-                print 'Adding ' + printableTree(element[0]) + ' to newLine.'
-                newLine.append(printableTree(element[0]))
-            else:
-                print 'Adding ' + str(element[1]) + ' to newLine.'
-                newLine.append(str(element[1]))
+                print 'Adding \'' + printableTree(element[0]) + '\' to header.'
+                header.append(printableTree(element[0]))
+            print 'Adding \'' + str(element[1]) + '\' to element \'' + printableTree(element[0]) + '\''
+            newLine.append(str(element[1]))
+        if (loop is 1):
+            table.append(header)
         table.append(newLine)
         print '------'
         if line[-1] is False:
