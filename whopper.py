@@ -1,7 +1,12 @@
 #!/usr/bin/env python2
 
-# Tokens
+class SyntaxException(Exception):
+    def __init__(self, data):
+        self.data = data
+    def __str__(self):
+        return self.data
 
+# Tokens
 reserved = {
     'and': 'AND',
     'or': 'OR',
@@ -31,8 +36,10 @@ def t_newline(t):
     t.lexer.lineno += t.value.count("\n")
     
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
+    data = "Illegal character:\n"
+    data += t.lexer.lexdata + "\n"
+    data += '~' * t.lexpos + '^'
+    raise SyntaxException(data)
 
 # Build the lexer
 import ply.lex as lex
@@ -47,15 +54,6 @@ precedence = (
     )
 
 # dictionary of identifiers
-class SyntaxException(Exception):
-    def __init__(self, token):
-        self.token = token
-    def __str__(self):
-        return 'Syntax error at ' + self.token.value
-    def printPretty(self, expression):
-        print(expression)
-        print('~' * self.token.lexpos + '^' * len(self.token.value))
-
 identifiers = []
 
 def p_expr(p):
@@ -115,7 +113,11 @@ def p_identifier_expr(p):
     p[0] = ('IDENTIFIER', p[1])
 
 def p_error(t):
-    raise SyntaxException(t)
+    data = "Syntax error"
+    if t:
+        data += ":\n" + t.lexer.lexdata + "\n"
+        data += '~' * t.lexpos + '^' * len(t.value)
+    raise SyntaxException(data)
 
 import ply.yacc as yacc
 yacc.yacc()
@@ -277,10 +279,8 @@ def execute(expression):
 
 # Main loop ---------------------------------------------------------
 while 1:
-    expr = ''
     try:
-        expr = raw_input('whopper > ')
-        execute(expr)
+        execute(raw_input('whopper > '))
     except EOFError:
         print
         break
@@ -288,7 +288,5 @@ while 1:
         print
         continue
     except SyntaxException, e:
-        print('Syntax error:')
-        e.printPretty(expr)
-        print('')
+        print(e)
         continue
