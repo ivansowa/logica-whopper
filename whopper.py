@@ -139,7 +139,7 @@ def truth_table(variables):
     for i in range(0, pow(2,len(variables))):
         l = list((bin(i)[2:]).zfill(len(variables)))
         for i in range(0, len(l)):
-            if l[i] is '1':
+            if l[i] == '1':
                 l[i] = True
             else:
                 l[i] = False
@@ -159,7 +159,7 @@ class table_decorator:
                 return i[1]
 
         result = self.function(*args)
-        if not (args[0][0] is 'PAREN'):
+        if not (args[0][0] == 'PAREN'):
             self.table.append((args[0], result))
         return result
 
@@ -168,25 +168,25 @@ def resolve(tree, d):
     '''
     Returns the result of the expression (True of False)
     '''
-    if tree[0] is 'AND':
+    if tree[0] == 'AND':
         first = resolve(tree[1], d)
         second = resolve(tree[2], d)
         return first and second
-    elif tree[0] is 'OR':
+    elif tree[0] == 'OR':
         first = resolve(tree[1], d)
         second = resolve(tree[2], d)
         return first or second
-    elif tree[0] is 'NOT':
+    elif tree[0] == 'NOT':
         return not resolve(tree[1], d)
-    elif tree[0] is 'IMPLIES':
+    elif tree[0] == 'IMPLIES':
         first = not resolve(tree[1], d)
         second = resolve(tree[2], d)
         return first or second
-    elif tree[0] is 'EQUALS':
-        return resolve(tree[1], d) is resolve(tree[2], d)
-    elif tree[0] is 'PAREN':
+    elif tree[0] == 'EQUALS':
+        return resolve(tree[1], d) == resolve(tree[2], d)
+    elif tree[0] == 'PAREN':
         return resolve(tree[1], d)
-    elif tree[0] is 'IDENTIFIER':
+    elif tree[0] == 'IDENTIFIER':
         return d[tree[1]]
 
 def createResolveDict(l):
@@ -196,19 +196,19 @@ def createResolveDict(l):
     return d
 
 def printableTree(tree):
-    if tree[0] is 'AND':
+    if tree[0] == 'AND':
         return printableTree(tree[1]) + ' and ' + printableTree(tree[2])
-    elif tree[0] is 'OR':
+    elif tree[0] == 'OR':
         return printableTree(tree[1]) + ' or ' + printableTree(tree[2])
-    elif tree[0] is 'NOT':
+    elif tree[0] == 'NOT':
         return 'not ' + printableTree(tree[1])
-    elif tree[0] is 'IMPLIES':
+    elif tree[0] == 'IMPLIES':
         return printableTree(tree[1]) + ' implies ' + printableTree(tree[2])
-    elif tree[0] is 'EQUALS':
+    elif tree[0] == 'EQUALS':
         return printableTree(tree[1]) + ' equals ' + printableTree(tree[2])
-    elif tree[0] is 'PAREN':
+    elif tree[0] == 'PAREN':
         return '(' + printableTree(tree[1]) + ')'
-    elif tree[0] is 'IDENTIFIER':
+    elif tree[0] == 'IDENTIFIER':
         return tree[1]
 
 
@@ -260,13 +260,13 @@ def execute(expression):
         header = []
         newLine = []
         for element in table2:
-            if (loop is 1):
+            if (loop == 1):
                 header.append(printableTree(element[0]))
             newLine.append(str(element[1]))
-        if (loop is 1):
+        if (loop == 1):
             table.append(header)
         table.append(newLine)
-        if line[-1] is False:
+        if line[-1] == False:
             failed = True
         loop = loop + 1
     print_table(table)
